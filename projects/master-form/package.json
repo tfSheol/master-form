@@ -1,6 +1,6 @@
 {
   "name": "@sheol/master-form",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "keywords": ["angular", "material", "input", "form"],
   "license": "MIT",
@@ -10,10 +10,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/tfSheol/master-input.git"
+    "url": "https://github.com/tfSheol/master-form.git"
   },
   "bugs": {
-    "url": "https://github.com/tfSheol/master-input/issues"
+    "url": "https://github.com/tfSheol/master-form/issues"
   },
   "homepage": "https://www.npmjs.com/package/@tfsheol/master-form",
   "peerDependencies": {
