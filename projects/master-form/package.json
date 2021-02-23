@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/tfSheol/master-form/issues"
   },
-  "homepage": "https://www.npmjs.com/package/@tfsheol/master-form",
+  "homepage": "https://www.npmjs.com/package/@sheol/master-form",
   "peerDependencies": {
     "@angular/common": "^11.0.0",
     "@angular/core": "^11.0.0",
