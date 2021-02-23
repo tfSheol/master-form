@@ -1,0 +1,24 @@
+.example-card {
+    width: 400px;
+    margin: 20px;
+}
+
+.inline {
+    display: inline-block;
+    vertical-align: top;
+}
+  
+.example-header-image {
+    background-image: url('../assets/planet.jpg');
+    background-size: cover;
+}
+
+.mat-form-field-flex {
+    padding-bottom: 100px;
+}
+
+.center {
+    width: 100%;
+    text-align: center;
+    align-content: center;
+}

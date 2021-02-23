@@ -1,0 +1,60 @@
+<mat-card class="example-card inline">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Form renderer</mat-card-title>
+    <mat-card-subtitle>{{masterForms.length}} generated inputs</mat-card-subtitle>
+    <button mat-mini-fab color="warn" (click)="openDialog()"><mat-icon aria-hidden="false" aria-label="add input">add</mat-icon></button>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="masterForms.length == 0" class="center">
+      <mat-spinner class="center" diameter="30"></mat-spinner>
+    </div>
+    <master-form 
+      (onInit)="onInit($event)"
+      (onData)="onData($event)"
+      (onValidate)="validate($event)"
+      (onError)="onError($event)"
+      (onObservableUpdate)="onObservableUpdate($event)"
+      [observable]=observable
+      [data]=data></master-form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button [disabled]=disabled>VALIDATE</button>
+    <button mat-button>CANCEL</button>
+  </mat-card-actions>
+</mat-card>
+
+<div class="inline">
+  <mat-card class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Data / Validation</mat-card-title>
+      <mat-card-subtitle>{{errors.length}} finded errors</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <pre>{{errors | json}}</pre>
+    </mat-card-content>
+  </mat-card>
+  
+  <mat-card class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Data</mat-card-title>
+      <mat-card-subtitle>Data form</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <pre>{{data | json}}</pre>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<mat-card class="example-card inline">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Data source</mat-card-title>
+    <mat-card-subtitle>JSON</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <pre>{{masterForms | json}}</pre>
+  </mat-card-content>
+</mat-card>

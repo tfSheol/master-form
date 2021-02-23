@@ -1,0 +1,166 @@
+@import 'normalize.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+$material-design-icons-font-directory-path: '~material-design-icons-iconfont/dist/fonts/';
+@import '~material-design-icons-iconfont/src/material-design-icons';
+
+a {
+  text-decoration: none;
+}
+
+rect:hover, text:hover, text tspan:hover {
+  cursor: pointer;
+}
+
+.white-icon {
+  color: white;
+}
+
+.white-icon svg {
+  fill: white;
+}
+
+.info-label, .infoLabel {
+  color: darkgoldenrod;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.tools {
+  padding-bottom: 10px;
+}
+
+.tools button {
+  margin-right: 10px;
+}
+
+.info {
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 10px;
+}
+
+.grid-text-align-left mat-grid-tile .mat-figure {
+  justify-content: flex-start !important;
+}
+
+.grid-text-align-left mat-grid-tile .mat-figure mat-button {
+  border: 1px red !important;
+  color: red;
+}
+
+.error-card {
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.loading, .loading:after, .loading:before {
+  content: ' ';
+  top: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  animation: spinner 1600ms infinite ease-in-out;
+}
+
+.loading {
+  position: relative;
+  margin: 64px auto;
+  color: #555;
+  animation-delay: -160ms;
+}
+
+.loading:after {
+  left: 64px;
+}
+
+.loading:before {
+  left: -64px;
+  animation-delay: -320ms;
+}
+
+.loading:after, .loading:before {
+  position: absolute;
+}
+
+@keyframes spinner {
+  40% {
+    box-shadow: 0 40px 0 0;
+  }
+  0%, 80%, 100% {
+    box-shadow: 0 40px 0 -20px;
+  }
+}
+
+/*.mat-drawer-inner-container {
+  overflow: hidden !important;
+}*/
+
+.icon-display {
+    transform: scale(2);
+    text-align: end;
+}
+
+.icon-encare {
+    margin-top: 10px;
+    text-align: center;
+    padding-top: 5px;
+}
+
+.icon-text {
+    text-align: bottom !important;
+    vertical-align: bottom !important;
+}
+
+.text-top p {
+    text-align: top;
+    vertical-align: top;
+}
+
+.tools {
+    padding-bottom: 10px;
+}
+  
+.tools button {
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.tools-no-marging button {
+    margin-right: 0 !important;
+    display: inline-block;
+}
+
+.mat-card-dark-little {
+    background-color: #555;
+    width: fit-content;
+    color: #ffffff;
+    display: inline-block !important;
+    padding: 7.5px 16px !important;
+}
+
+.mat-card-dark-little-no-end-radius {
+    border-end-end-radius: 0 !important;
+    border-start-end-radius: 0 !important;
+}
+
+.tools-no-start-radius button {
+    border-end-start-radius: 0 !important;
+    border-start-start-radius: 0 !important;
+}
+
+.tools-no-radius {
+    border-end-start-radius: 0 !important;
+    border-start-start-radius: 0 !important;
+    border-end-end-radius: 0 !important;
+    border-start-end-radius: 0 !important;
+}
+
+.button-warning {
+    background-color: orange !important;
+}
+
+.inline-block {
+    display: inline-block;
+}

@@ -1,0 +1,54 @@
+<div>
+    <ng-container #itemsContainer></ng-container>
+<div>
+<form [formGroup]="formGroup">
+    <!-- <div *ngFor="let masterForm of masterForms"> -->
+    <ng-template #item let-masterForm="masterForm">
+        <mat-chip color="primary" selected *ngIf="formGroup.controls[masterForm.name] && isLabel(masterForm)">{{masterForm.display}}</mat-chip>
+        <mat-divider *ngIf="formGroup.controls[masterForm.name] && isLabel(masterForm)"></mat-divider>
+        <mat-form-field *ngIf="formGroup.controls[masterForm.name] && isInput(masterForm)" appearance="fill"
+            class="register-input">
+            <mat-label>{{masterForm.display}}</mat-label>
+            <input [formControlName]="masterForm.name" [type]="masterForm.inputType" matInput [placeholder]="masterForm.placeholder" 
+            (input)="masterForm.onInput(formGroup.controls[masterForm.name], $event.target)" 
+            [minLength]="masterForm.minLength" [maxLength]="masterForm.maxLength" [required]="masterForm.required">
+            <mat-error *ngIf="masterForm.errorMessageFunction && formGroup.controls[masterForm.name].invalid">
+                {{masterForm.errorMessageFunction(formGroup.controls[masterForm.name])}}
+            </mat-error>
+            <mat-icon *ngIf="masterForm.hasIcon" matSuffix>{{masterForm.icon}}</mat-icon>
+        </mat-form-field>
+        <mat-form-field *ngIf="formGroup.controls[masterForm.name] && isSelect(masterForm)">
+            <mat-select [formControlName]="masterForm.name" [placeholder]="selectPlaceholder(masterForm)"
+                [multiple]=masterForm.isMultiselect [required]="masterForm.required">
+                <mat-option *ngIf="masterForm.hasFilter">
+                    <ngx-mat-select-search [formControlName]="masterForm.name + '_filter'"
+                        [placeholderLabel]="masterForm.filterPlaceholder"
+                        [noEntriesFoundLabel]="masterForm.filterNoEntries"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngIf="!masterForm.required" value="null">Aucun</mat-option>
+                <ng-container *ngFor="let value of getItemsList(masterForm)">
+                    <mat-option *ngIf="!masterForm.customDataField" [value]="value">{{ value }}</mat-option>
+                    <mat-option *ngIf="masterForm.customDataField" [value]="value[masterForm.customDataField.sourceField]">{{ value[masterForm.customDataField.sourceField] }}</mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-error *ngIf="masterForm.errorMessageFunction && formGroup.controls[masterForm.name].invalid">
+                {{masterForm.errorMessageFunction(formGroup.controls[masterForm.name])}}
+            </mat-error>
+            <mat-icon *ngIf="masterForm.hasIcon" matSuffix>{{masterForm.icon}}</mat-icon>
+        </mat-form-field>
+        <div *ngIf="formGroup.controls[masterForm.name] && isCheckbox(masterForm)" class="add-bottom-padding">
+            <mat-checkbox [formControlName]="masterForm.name" [required]=required>{{masterForm.display}}</mat-checkbox>
+            <mat-icon *ngIf="masterForm.hasIcon" matSuffix>{{masterForm.icon}}</mat-icon>
+        </div>
+        <mat-form-field *ngIf="formGroup.controls[masterForm.name] && isTextarea(masterForm)" appearance="fill"
+            class="register-input">
+            <mat-label>{{masterForm.display}}</mat-label>
+            <textarea [formControlName]="masterForm.name" matInput [placeholder]="masterForm.placeholder" [required]="masterForm.required"></textarea>
+            <mat-error *ngIf="masterForm.errorMessageFunction && formGroup.controls[masterForm.name].invalid">
+                {{masterForm.errorMessageFunction(formGroup.controls[masterForm.name])}}
+            </mat-error>
+            <mat-icon *ngIf="masterForm.hasIcon" matSuffix>{{masterForm.icon}}</mat-icon>
+        </mat-form-field>
+    </ng-template>
+    <!-- </div> -->
+</form>

@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Little input builder</h1>
+<div mat-dialog-content>
+    <master-form 
+        (onInit)="onInit($event)"
+        (onData)="onData($event)"
+        (onValidate)="validate($event)"
+        (onError)="onError($event)"
+        (onObservableUpdate)="onObservableUpdate($event)"
+        [data]=data
+        [forms]=masterForms></master-form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button (click)="onValidate()" [disabled]=disabled>Add this</button>
+</div>
