@@ -4,6 +4,7 @@
     <mat-card-title>Form renderer</mat-card-title>
     <mat-card-subtitle>{{masterForms.length}} generated inputs</mat-card-subtitle>
     <button mat-mini-fab color="warn" (click)="openDialog()"><mat-icon aria-hidden="false" aria-label="add input">add</mat-icon></button>
+    <button mat-mini-fab color="warn" (click)="clear()"><mat-icon aria-hidden="false" aria-label="clear input">clear</mat-icon></button>
   </mat-card-header>
   <mat-card-content>
     <div *ngIf="masterForms.length == 0" class="center">
@@ -15,6 +16,7 @@
       (onValidate)="validate($event)"
       (onError)="onError($event)"
       (onObservableUpdate)="onObservableUpdate($event)"
+      [clear]="change"
       [observable]=observable
       [data]=data></master-form>
   </mat-card-content>

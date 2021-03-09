@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MasterForm, MasterFormHelperInterface, MasterFormType, MasterFormHelperData, MasterFormService } from 'master-form';
@@ -18,6 +18,7 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
   public preloadData: any = <any>{};
   public disabled: boolean = true;
   public errors: any[] = [];
+  public change: EventEmitter<void> = new EventEmitter();
 
   private jsonData: BehaviorSubject<MasterForm[]> = new BehaviorSubject([]);
   public observable: Observable<MasterForm[]> = this.jsonData.asObservable();
@@ -122,6 +123,12 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
       inputType: 'url'
     }
   ];
+
+  clear() {
+    this.data = {};
+    this.masterForms = [];
+    this.change.emit();
+  }
 
   onInit(data: MasterFormHelperData<any>): void {
   }

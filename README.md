@@ -1,4 +1,8 @@
-![demo-1](./assets/demo.png)
+# @sheol/master-form
+
+<p align="center">
+  <img src='assets/demo.png' height="500px" alt="Demo" title="Demo"/>
+</p>
 
 ```bash
 $ npm install --save @sheol/master-form
@@ -8,7 +12,7 @@ $ npm install --save @sheol/master-form
 // package.json
 
 "dependencies": {
-  "master-form": "@sheol/master-form",
+  "@sheol/master-form": "1.0.3",
   "ngx-mat-select-search": "^3.1.2",
 }
 ```
@@ -158,4 +162,58 @@ MasterForm[] = [
   display: 'Description',
   type: MasterFormType.TEXTAREA
 }
+```
+
+## Check Angular lifecycle hooks
+
+<p align="center">
+  <img src='assets/angular-lifecycle.png' alt="Angular_lifecycle" title="Angular_lifecycle"/>
+</p>
+
+Called before ngOnInit() and whenever one or more data-bound input properties change.
+Respond when Angular sets or resets data-bound input properties. The method receives a SimpleChanges object of current and previous property values. Note that this happens very frequently, so any operation you perform here impacts performance significantly.
+```ts
+  ngOnChanges()
+```
+
+Called once, after the first ngOnChanges().
+Initialize the directive or component after Angular first displays the data-bound properties and sets the directive or component's input properties.
+```ts
+  ngOnInit()
+```
+
+Called immediately after ngOnChanges() on every change detection run, and immediately after ngOnInit() on the first run.
+Detect and act upon changes that Angular can't or won't detect on its own.
+```ts
+  ngDoCheck()
+```
+
+Called once after the first ngDoCheck().
+Respond after Angular projects external content into the component's view, or into the view that a directive is in.
+```ts
+  ngAfterContentInit()
+```
+
+Called after ngAfterContentInit() and every subsequent ngDoCheck().
+Respond after Angular checks the content projected into the directive or component.
+```ts
+  ngAfterContentChecked()
+```
+
+Called once after the first ngAfterContentChecked().
+Respond after Angular initializes the component's views and child views, or the view that contains the directive.
+```ts
+  ngAfterViewInit()
+```
+
+Called after the ngAfterViewInit() and every subsequent ngAfterContentChecked().
+Respond after Angular checks the component's views and child views, or the view that contains the directive.
+```ts
+  ngAfterViewChecked()
+```
+
+Called immediately before Angular destroys the directive or component.
+Cleanup just before Angular destroys the directive or component. Unsubscribe Observables and detach event handlers to avoid memory leaks.
+```ts
+  ngOnDestroy()
 ```

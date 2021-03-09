@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { MasterFormHelperData } from './master-form.helper.interface';
@@ -47,7 +47,7 @@ export declare interface MasterForm {
     templateUrl: 'master-form.component.html',
     styleUrls: ['master-form.component.scss']
 })
-export class MasterFormComponent implements OnDestroy, AfterViewInit {
+export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit {
     public static MAX_INPUT_VALUE: number = 500;
     public static MIN_INPUT_VALUE: number = 0;
     private subscriptions: Subscription[] = [];
@@ -58,16 +58,24 @@ export class MasterFormComponent implements OnDestroy, AfterViewInit {
     @Input() data: any = <any>{};
     @Input() autoValidate?: boolean
 
-    @Output() onInit: EventEmitter<any> = new EventEmitter();
-    @Output() onData: EventEmitter<any> = new EventEmitter();
-    @Output() onValidate: EventEmitter<any> = new EventEmitter();
-    @Output() onError: EventEmitter<any> = new EventEmitter();
+    @Input() clear?: EventEmitter<void> = new EventEmitter();
+
+    @Output() onInit?: EventEmitter<any> = new EventEmitter();
+    @Output() onData?: EventEmitter<any> = new EventEmitter();
+    @Output() onValidate?: EventEmitter<any> = new EventEmitter();
+    @Output() onError?: EventEmitter<any> = new EventEmitter();
     @Output() onObservableUpdate?: EventEmitter<any> = new EventEmitter();
 
     @ViewChild('itemsContainer', { read: ViewContainerRef }) container: ViewContainerRef;
     @ViewChild('item', { read: TemplateRef }) template: TemplateRef<any>
 
     constructor() {
+    }
+
+    ngAfterContentInit() {
+        this.addSubscription(this.clear.subscribe(() => {
+            this.container.clear();
+        }));
     }
 
     private addInput<T>(masterForm: MasterForm): MasterFormComponent {
@@ -229,7 +237,7 @@ export class MasterFormComponent implements OnDestroy, AfterViewInit {
         })
     }
 
-    ngAfterViewInit(): void {
+    ngOnInit(): void { // old ngAfterViewInit
         if (this.observable) {
             this.addSubscription(this.observable.subscribe(masterForms => {
                 this.masterForms = masterForms;
