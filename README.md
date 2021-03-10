@@ -12,8 +12,7 @@ $ npm install --save @sheol/master-form
 // package.json
 
 "dependencies": {
-  "@sheol/master-form": "1.0.3",
-  "ngx-mat-select-search": "^3.1.2",
+  "@sheol/master-form": "1.0.4"
 }
 ```
 

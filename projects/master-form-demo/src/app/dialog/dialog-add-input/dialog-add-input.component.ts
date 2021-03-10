@@ -73,22 +73,26 @@ export class DialogAddInputComponent implements MasterFormHelperInterface<any>, 
   ]
 
   onInit(data: MasterFormHelperData<any>): void {
-    
+    console.log(data);
   }
 
   validate(disabled: boolean): void {
+    console.log(disabled);
     this.disabled = disabled;
   }
 
   onData(data: MasterFormHelperData<any>): void {
+    console.log(data);
     this.dataInput = data.data;
   }
 
   onError?(errors: any[]): void {
+    console.log(errors);
     this.errors = errors.filter(error => !error.isValid);
   }
 
   onObservableUpdate?(data: MasterFormHelperData<any>): void {
+    console.log(data);
     data.form.markAllAsTouched();
   }
 

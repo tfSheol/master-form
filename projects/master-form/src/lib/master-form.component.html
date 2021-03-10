@@ -25,7 +25,7 @@
                         [placeholderLabel]="masterForm.filterPlaceholder"
                         [noEntriesFoundLabel]="masterForm.filterNoEntries"></ngx-mat-select-search>
                 </mat-option>
-                <mat-option *ngIf="!masterForm.required" value="null">Aucun</mat-option>
+                <mat-option *ngIf="!masterForm.required" value="null">Aucun</mat-option> <!-- todo: change condition & value-->
                 <ng-container *ngFor="let value of getItemsList(masterForm)">
                     <mat-option *ngIf="!masterForm.customDataField" [value]="value">{{ value }}</mat-option>
                     <mat-option *ngIf="masterForm.customDataField" [value]="value[masterForm.customDataField.sourceField]">{{ value[masterForm.customDataField.sourceField] }}</mat-option>

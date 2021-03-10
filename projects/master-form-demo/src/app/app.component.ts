@@ -19,6 +19,7 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
   public disabled: boolean = true;
   public errors: any[] = [];
   public change: EventEmitter<void> = new EventEmitter();
+  public render: EventEmitter<void> = new EventEmitter();
 
   private jsonData: BehaviorSubject<MasterForm[]> = new BehaviorSubject([]);
   public observable: Observable<MasterForm[]> = this.jsonData.asObservable();
@@ -125,27 +126,36 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
   ];
 
   clear() {
-    this.data = {};
-    this.masterForms = [];
+    // this.data = {};
+    // this.masterForms = [];
     this.change.emit();
   }
 
+  test() {
+    this.render.emit();
+  }
+
   onInit(data: MasterFormHelperData<any>): void {
+    console.log(data);
   }
 
   validate(disabled: boolean): void {
+    console.log(disabled);
     this.disabled = disabled;
   }
 
   onData(data: MasterFormHelperData<any>): void {
+    console.log(data);
     this.data = data.data;
   }
 
   onError(errors: any[]): void {
+    console.log(errors);
     this.errors = errors.filter(error => !error.isValid);
   }
 
   onObservableUpdate(data: MasterFormHelperData<any>): void {
+    console.log(data);
     data.form.markAllAsTouched();
   }
 }

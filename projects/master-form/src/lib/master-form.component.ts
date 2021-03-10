@@ -41,6 +41,16 @@ export declare interface MasterForm {
     filteredValue?: any[];
 }
 
+export enum SubType {
+    SYSTEM,
+    DEFAULT
+}
+
+export declare interface Subs {
+    type: SubType;
+    subscription: Subscription
+}
+
 @Component({
     moduleId: module.id,
     selector: 'master-form',
@@ -50,15 +60,17 @@ export declare interface MasterForm {
 export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit {
     public static MAX_INPUT_VALUE: number = 500;
     public static MIN_INPUT_VALUE: number = 0;
-    private subscriptions: Subscription[] = [];
+    private subscriptions: Subs[] = [];
     public formGroup: FormGroup = new FormGroup({});
 
     @Input() observable?: Observable<MasterForm[]>;
     @Input('forms') masterForms?: MasterForm[] = [];
     @Input() data: any = <any>{};
-    @Input() autoValidate?: boolean
+    @Input() autoValidate?: boolean;
 
     @Input() clear?: EventEmitter<void> = new EventEmitter();
+    @Input() render?: EventEmitter<void> = new EventEmitter();
+    @Input() reload?: EventEmitter<void> = new EventEmitter();
 
     @Output() onInit?: EventEmitter<any> = new EventEmitter();
     @Output() onData?: EventEmitter<any> = new EventEmitter();
@@ -67,14 +79,26 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
     @Output() onObservableUpdate?: EventEmitter<any> = new EventEmitter();
 
     @ViewChild('itemsContainer', { read: ViewContainerRef }) container: ViewContainerRef;
-    @ViewChild('item', { read: TemplateRef }) template: TemplateRef<any>
+    @ViewChild('item', { read: TemplateRef }) template: TemplateRef<any>;
 
     constructor() {
     }
 
     ngAfterContentInit() {
-        this.addSubscription(this.clear.subscribe(() => {
+        this.addSubscription(SubType.SYSTEM, this.clear.subscribe(() => {
+            this.masterForms = [];
+            this.data = {};
             this.container.clear();
+            this.subscriptions.filter(sub => sub.type == SubType.DEFAULT).forEach(subscription => {
+                if (!subscription.subscription.closed) {
+                    subscription.subscription.unsubscribe();
+                }
+            });
+        }));
+        this.addSubscription(SubType.SYSTEM, this.render.subscribe(() => this.renderItem()));
+        this.addSubscription(SubType.SYSTEM, this.reload.subscribe(() => {
+            this.container.clear();
+            this.renderItem();
         }));
     }
 
@@ -122,13 +146,13 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
                 masterForm.minLength = MasterFormComponent.MIN_INPUT_VALUE;
             }
             if (masterForm.data) {
-                this.addSubscription(masterForm.data().subscribe(data => {
+                this.addSubscription(SubType.DEFAULT, masterForm.data().subscribe(data => {
                     masterForm.value = data;
                     masterForm.filteredValue = data;
                 }));
                 if (masterForm.hasFilter) {
                     let filterCtrl = new FormControl();
-                    this.addSubscription(filterCtrl.valueChanges.subscribe(search => {
+                    this.addSubscription(SubType.DEFAULT, filterCtrl.valueChanges.subscribe(search => {
                         this.filter(masterForm, search);
                     }));
                     this.formGroup.addControl(masterForm.name + '_filter', filterCtrl);
@@ -167,13 +191,16 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
         }, INTERVAL_IN_MS);
     };
 
-    protected addSubscription(subscription: Subscription) {
-        this.subscriptions.push(subscription);
+    protected addSubscription(type: SubType, subscription: Subscription) {
+        this.subscriptions.push({
+            type: type,
+            subscription: subscription
+        });
     }
 
     private init(masterForms: MasterForm[]) {
         this.autoAddInput(masterForms);
-        this.addSubscription(this.formGroup.valueChanges.subscribe(value => {
+        this.addSubscription(SubType.DEFAULT, this.formGroup.valueChanges.subscribe(value => {
             Object.getOwnPropertyNames(value).forEach(val => {
                 if (val.includes('_filter')) {
                     delete value[val];
@@ -187,14 +214,13 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
                         let vl = el.value?.find(e => e[el.customDataField.sourceField] === element);
                         if (vl) {
                             value[el.name].push(vl[el.customDataField.idField]);
-                            // value[el.name] = [...value[el.name], vl[el.customDataField.idField]];
                         }
                     });
                 }
             })
             this.onData.emit(<MasterFormHelperData<any>>{
                 data: value,
-                form: this.formGroup // maybe return specific form...
+                form: this.formGroup
             });
             this.onValidate.emit(!(this.formGroup.valid));
         }));
@@ -206,15 +232,10 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
             });
         }
         if (this.onError) {
-            this.addSubscription(this.formGroup.valueChanges.subscribe(() => {
+            this.addSubscription(SubType.DEFAULT, this.formGroup.valueChanges.subscribe(() => {
                 this.emitOnError();
             }));
         }
-        // this.addSubscription(this.formGroup.valueChanges.subscribe(() => {
-        //     this.onValidate.emit(!(this.formGroup.valid));
-        // }));
-
-        // manual render items
         this.renderItem();
     }
 
@@ -231,15 +252,16 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
 
     ngOnDestroy() {
         this.subscriptions.forEach(subscription => {
-            if (!subscription.closed) {
-                subscription.unsubscribe();
+            if (!subscription.subscription.closed) {
+                subscription.subscription.unsubscribe();
             }
-        })
+        });
     }
 
-    ngOnInit(): void { // old ngAfterViewInit
+    ngOnInit(): void {
         if (this.observable) {
-            this.addSubscription(this.observable.subscribe(masterForms => {
+            this.addSubscription(SubType.SYSTEM, this.observable.subscribe(masterForms => {
+                console.log("---> update", masterForms);
                 this.masterForms = masterForms;
                 this.init(masterForms);
                 if (this.onObservableUpdate) {
