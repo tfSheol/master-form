@@ -1,7 +1,7 @@
 # @sheol/master-form
 
 <p align="center">
-  <img src='assets/demo.png' height="500px" alt="Demo" title="Demo"/>
+  <img src='assets/demo.png' style="border-radius:4px" alt="Demo" title="Demo"/>
 </p>
 
 ```bash

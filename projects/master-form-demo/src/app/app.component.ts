@@ -56,16 +56,17 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
       console.log('The dialog was closed');
       console.log(result);
       if (result !== undefined) {
-        // this.masterFormService.buildData(500, (i) => {
-        //   let t = { ...result };
-        //   t.name = i + '-' + t.name;
-        //   t.display = i + '-' + t.display;
-        //   this.masterForms.push(t);
-        // }, () => {
-        //   this.jsonData.next(this.masterForms);
-        // });
-        this.masterForms.push(result);
-        this.jsonData.next([result]);
+        // this.masterForms = [];
+        this.masterFormService.buildData(100, (i) => {
+          let t = { ...result };
+          t.name = i + '-' + t.name;
+          t.display = i + '-' + t.display;
+          this.masterForms.push(t);
+        }, () => {
+          this.jsonData.next(this.masterForms);
+        });
+        // this.masterForms.push(result);
+        // this.jsonData.next([result]);
       }
     });
   }
@@ -126,8 +127,9 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
   ];
 
   clear() {
-    // this.data = {};
-    // this.masterForms = [];
+    this.data = null;
+    this.errors = [];
+    this.masterForms = [];
     this.change.emit();
   }
 
@@ -136,26 +138,22 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
   }
 
   onInit(data: MasterFormHelperData<any>): void {
-    console.log(data);
   }
 
   validate(disabled: boolean): void {
-    console.log(disabled);
     this.disabled = disabled;
   }
 
   onData(data: MasterFormHelperData<any>): void {
-    console.log(data);
     this.data = data.data;
   }
 
   onError(errors: any[]): void {
-    console.log(errors);
+    console.log("errors", errors);
     this.errors = errors.filter(error => !error.isValid);
   }
 
   onObservableUpdate(data: MasterFormHelperData<any>): void {
-    console.log(data);
     data.form.markAllAsTouched();
   }
 }

@@ -1,6 +1,6 @@
-import { AfterContentInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { AfterContentInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { FormControl, FormGroup, ValidatorFn, FormGroupDirective } from '@angular/forms';
+import { Observable, Subscription, of } from 'rxjs';
 import { MasterFormHelperData } from './master-form.helper.interface';
 
 export enum MasterFormType {
@@ -54,6 +54,7 @@ export declare interface Subs {
 @Component({
     moduleId: module.id,
     selector: 'master-form',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: 'master-form.component.html',
     styleUrls: ['master-form.component.scss']
 })
@@ -68,20 +69,24 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
     @Input() data: any = <any>{};
     @Input() autoValidate?: boolean;
 
+    @Input() rendererItemsRenderedAtOnce?: number = 30;
+    @Input() rendererItemsIntervalInMs?: number = 20;
+
     @Input() clear?: EventEmitter<void> = new EventEmitter();
     @Input() render?: EventEmitter<void> = new EventEmitter();
     @Input() reload?: EventEmitter<void> = new EventEmitter();
 
-    @Output() onInit?: EventEmitter<any> = new EventEmitter();
-    @Output() onData?: EventEmitter<any> = new EventEmitter();
-    @Output() onValidate?: EventEmitter<any> = new EventEmitter();
-    @Output() onError?: EventEmitter<any> = new EventEmitter();
-    @Output() onObservableUpdate?: EventEmitter<any> = new EventEmitter();
+    @Output() onInit?: EventEmitter<MasterFormHelperData<any>> = new EventEmitter();
+    @Output() onData?: EventEmitter<MasterFormHelperData<any>> = new EventEmitter();
+    @Output() onValidate?: EventEmitter<boolean> = new EventEmitter();
+    @Output() onError?: EventEmitter<any[]> = new EventEmitter();
+    @Output() onObservableUpdate?: EventEmitter<MasterFormHelperData<any>> = new EventEmitter();
 
     @ViewChild('itemsContainer', { read: ViewContainerRef }) container: ViewContainerRef;
     @ViewChild('item', { read: TemplateRef }) template: TemplateRef<any>;
+    @ViewChild(FormGroupDirective) formDirective: FormGroupDirective;
 
-    constructor() {
+    constructor(private ref: ChangeDetectorRef) {
     }
 
     ngAfterContentInit() {
@@ -89,6 +94,14 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
             this.masterForms = [];
             this.data = {};
             this.container.clear();
+            this.formGroup.reset();
+            this.formDirective.resetForm();
+            this.onError.emit([]);
+            this.onValidate.emit(false);
+            this.onData.emit({
+                data: [],
+                form: <FormGroup>{}
+            });
             this.subscriptions.filter(sub => sub.type == SubType.DEFAULT).forEach(subscription => {
                 if (!subscription.subscription.closed) {
                     subscription.subscription.unsubscribe();
@@ -168,8 +181,8 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
     }
 
     private renderItem() {
-        const ITEMS_RENDERED_AT_ONCE = 30;
-        const INTERVAL_IN_MS = 20;
+        const ITEMS_RENDERED_AT_ONCE = this.rendererItemsRenderedAtOnce
+        const INTERVAL_IN_MS = this.rendererItemsIntervalInMs;
 
         let currentIndex = 0;
 
@@ -187,6 +200,7 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
                     masterForm: this.masterForms[n]
                 });
             }
+            this.ref.detectChanges();
             currentIndex += ITEMS_RENDERED_AT_ONCE;
         }, INTERVAL_IN_MS);
     };
@@ -231,26 +245,29 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
                 form: this.formGroup
             });
         }
-        if (this.onError) {
-            this.addSubscription(SubType.DEFAULT, this.formGroup.valueChanges.subscribe(() => {
-                this.emitOnError();
-            }));
-        }
         this.renderItem();
+        if (this.onError) {
+            if (this.formGroup.errors !== null) {
+                this.emitOnError();
+            }
+        }
     }
 
     emitOnError() {
-        this.onError.emit(Object.keys(this.formGroup.controls).map(object => {
-            return {
-                'name': object,
-                'erros': this.formGroup.controls[object].errors,
-                'status': this.formGroup.controls[object].status,
-                'isValid': this.formGroup.controls[object].status !== "INVALID"
-            }
-        }));
+        this.onError.emit(Object.keys(this.formGroup.controls)
+            .filter(key => this.formGroup.controls[key].status === "INVALID")
+            .map(object => {
+                return {
+                    'name': object,
+                    'erros': this.formGroup.controls[object].errors,
+                    'status': this.formGroup.controls[object].status,
+                    'isValid': this.formGroup.controls[object].status !== "INVALID"
+                }
+            }));
     }
 
     ngOnDestroy() {
+        console.log('destroy')
         this.subscriptions.forEach(subscription => {
             if (!subscription.subscription.closed) {
                 subscription.subscription.unsubscribe();
@@ -261,7 +278,6 @@ export class MasterFormComponent implements OnDestroy, OnInit, AfterContentInit 
     ngOnInit(): void {
         if (this.observable) {
             this.addSubscription(SubType.SYSTEM, this.observable.subscribe(masterForms => {
-                console.log("---> update", masterForms);
                 this.masterForms = masterForms;
                 this.init(masterForms);
                 if (this.onObservableUpdate) {

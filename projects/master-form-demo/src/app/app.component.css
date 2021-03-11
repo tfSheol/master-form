@@ -22,3 +22,7 @@
     text-align: center;
     align-content: center;
 }
+
+mat-card-header button {
+    margin-right: 10px;
+}

@@ -1,7 +1,7 @@
 <div>
     <ng-container #itemsContainer></ng-container>
 <div>
-<form [formGroup]="formGroup">
+<form [formGroup]="formGroup" #formDirective="ngForm">
     <!-- <div *ngFor="let masterForm of masterForms"> -->
     <ng-template #item let-masterForm="masterForm">
         <mat-chip color="primary" selected *ngIf="formGroup.controls[masterForm.name] && isLabel(masterForm)">{{masterForm.display}}</mat-chip>
