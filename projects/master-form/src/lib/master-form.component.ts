@@ -52,7 +52,6 @@ export declare interface Subs {
 }
 
 @Component({
-    moduleId: module.id,
     selector: 'master-form',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: 'master-form.component.html',

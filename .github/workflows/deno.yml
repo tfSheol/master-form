@@ -11,6 +11,7 @@ jobs:
         with:
           node-version: 14
       - run: npm install
-      - run: npm test
+      - name: Run Karma Tests
+        uses: ahmedrizwan/angular-karma-test-action
       - name: Run Tests
         run: deno test -A --unstable
