@@ -1,0 +1,48 @@
+{
+  "name": "@sheol/master-form",
+  "version": "1.0.5",
+  "description": "",
+  "keywords": [
+    "angular",
+    "material",
+    "input",
+    "form"
+  ],
+  "license": "MIT",
+  "author": "Teddy Fontaine <pro@teddyfontaine.fr>",
+  "contributors": [
+    "Teddy Fontaine <pro@teddyfontaine.fr>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tfSheol/master-form.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tfSheol/master-form/issues"
+  },
+  "homepage": "https://www.npmjs.com/package/@sheol/master-form",
+  "dependencies": {
+    "tslib": "^2.0.0",
+    "ngx-mat-select-search": "^3.1.2"
+  },
+  "module": "fesm2015/sheol-master-form.mjs",
+  "es2020": "fesm2020/sheol-master-form.mjs",
+  "esm2020": "esm2020/sheol-master-form.mjs",
+  "fesm2020": "fesm2020/sheol-master-form.mjs",
+  "fesm2015": "fesm2015/sheol-master-form.mjs",
+  "typings": "sheol-master-form.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./sheol-master-form.d.ts",
+      "esm2020": "./esm2020/sheol-master-form.mjs",
+      "es2020": "./fesm2020/sheol-master-form.mjs",
+      "es2015": "./fesm2015/sheol-master-form.mjs",
+      "node": "./fesm2015/sheol-master-form.mjs",
+      "default": "./fesm2020/sheol-master-form.mjs"
+    }
+  },
+  "sideEffects": false
+}
