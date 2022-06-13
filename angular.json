@@ -58,7 +58,6 @@
             "main": "projects/master-form-demo/src/main.ts",
             "polyfills": "projects/master-form-demo/src/polyfills.ts",
             "tsConfig": "projects/master-form-demo/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/master-form-demo/src/favicon.ico",
               "projects/master-form-demo/src/assets"
@@ -66,7 +65,13 @@
             "styles": [
               "projects/master-form-demo/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -96,7 +101,8 @@
                 }
               ]
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
