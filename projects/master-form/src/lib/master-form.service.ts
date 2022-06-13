@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MasterFormService {
   private ITEMS_RENDERED_AT_ONCE = 100;
   private INTERVAL_IN_MS = 20;
 
-  constructor() { }
+  constructor() {}
 
   public setItemsRenderedAtOnce(value: number) {
     this.ITEMS_RENDERED_AT_ONCE = value;

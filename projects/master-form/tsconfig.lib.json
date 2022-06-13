@@ -2,6 +2,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "strict": false,
     "outDir": "../../out-tsc/lib",
     "target": "es5",
     "declaration": true,
@@ -15,9 +16,14 @@
     ]
   },
   "angularCompilerOptions": {
+    "enableIvy": true,
+    "compilationMode": "partial",
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
-    "enableResourceInlining": true
+    "enableResourceInlining": true,
+    "strictTemplates": true,
+    "fullTemplateTypeCheck": true,
+    "preserveWhitespaces": true
   },
   "exclude": [
     "src/test.ts",

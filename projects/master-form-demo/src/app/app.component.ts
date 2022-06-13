@@ -21,8 +21,8 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
   public change: EventEmitter<void> = new EventEmitter();
   public render: EventEmitter<void> = new EventEmitter();
 
-  private jsonData: BehaviorSubject<MasterForm[]> = new BehaviorSubject([]);
-  public observable: Observable<MasterForm[]> = this.jsonData.asObservable();
+  // public jsonData: BehaviorSubject<MasterForm[]> = new BehaviorSubject([]);
+  // public observable: Observable<MasterForm> = this.jsonData.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -32,18 +32,24 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
   ) { }
 
   async ngOnInit() {
-    this.jsonData
-      .pipe(
-        shareReplay({
-          bufferSize: 1,
-          refCount: true
-        })
-      ).subscribe(() => {
-        this.data = this.preloadData;
-      });
+    // this.jsonData
+    //   .pipe(
+    //     shareReplay({
+    //       bufferSize: 1,
+    //       refCount: true
+    //     })
+    //   ).subscribe(() => {
+    //     this.data = this.preloadData;
+    //   });
 
-    this.jsonData.next([...this.masterForms]);
-    this.changeDetectorRefs.detectChanges();
+    // this.jsonData.next(this.masterForms);
+    
+    
+    // this.jsonData.
+    // this.jsonData.subscribe(de => {
+    //   de.forEach(i => this.masterForms.push(i));
+    // });
+    // this.changeDetectorRefs.detectChanges();
   }
 
   openDialog(): void {
@@ -56,17 +62,9 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
       console.log('The dialog was closed');
       console.log(result);
       if (result !== undefined) {
-        // this.masterForms = [];
-        this.masterFormService.buildData(100, (i) => {
-          let t = { ...result };
-          t.name = i + '-' + t.name;
-          t.display = i + '-' + t.display;
-          this.masterForms.push(t);
-        }, () => {
-          this.jsonData.next(this.masterForms);
-        });
-        // this.masterForms.push(result);
+        this.masterForms.push(result);
         // this.jsonData.next([result]);
+        this.changeDetectorRefs.detectChanges();
       }
     });
   }
@@ -84,6 +82,7 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
       type: MasterFormType.SELECT,
       hasFilter: true,
       filterPlaceholder: 'find a test ?',
+      nullable: true,
       data: () => of(["test1", "test2"])
     }, {
       name: 'description',
@@ -130,11 +129,14 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
     this.data = null;
     this.errors = [];
     this.masterForms = [];
+    // this.jsonData.next([]);
     this.change.emit();
   }
 
-  test() {
+  reload() {
+    // console.log(this.jsonData.getValue());
     this.render.emit();
+    // this.jsonData.next(this.masterForms);
   }
 
   onInit(data: MasterFormHelperData<any>): void {
@@ -145,6 +147,7 @@ export class AppComponent implements MasterFormHelperInterface<any>, OnInit {
   }
 
   onData(data: MasterFormHelperData<any>): void {
+    console.log(data);
     this.data = data.data;
   }
 

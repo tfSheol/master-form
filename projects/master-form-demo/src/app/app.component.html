@@ -5,7 +5,7 @@
     <mat-card-subtitle>{{masterForms.length}} generated inputs</mat-card-subtitle>
     <button mat-mini-fab color="warn" (click)="openDialog()"><mat-icon aria-hidden="false" aria-label="add input">add</mat-icon></button>
     <button mat-mini-fab color="warn" (click)="clear()"><mat-icon aria-hidden="false" aria-label="clear input">clear</mat-icon></button>
-    <button mat-mini-fab color="warn" (click)="test()"><mat-icon aria-hidden="false" aria-label="cached input">cached</mat-icon></button>
+    <button mat-mini-fab color="warn" (click)="reload()"><mat-icon aria-hidden="false" aria-label="cached input">cached</mat-icon></button>
   </mat-card-header>
   <mat-card-content>
     <div *ngIf="masterForms.length == 0" class="center">
@@ -19,11 +19,11 @@
       (onObservableUpdate)="onObservableUpdate($event)"
       [clear]="change"
       [reload]="render"
-      [observable]=observable
+      [forms]=masterForms
       [data]=data></master-form>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button [disabled]=disabled>VALIDATE</button>
+    <button mat-button disabled="disabled">VALIDATE</button>
     <button mat-button>CANCEL</button>
   </mat-card-actions>
 </mat-card>

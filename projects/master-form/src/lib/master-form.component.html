@@ -1,8 +1,7 @@
 <div>
     <ng-container #itemsContainer></ng-container>
-<div>
+</div>
 <form [formGroup]="formGroup" #formDirective="ngForm">
-    <!-- <div *ngFor="let masterForm of masterForms"> -->
     <ng-template #item let-masterForm="masterForm">
         <mat-chip color="primary" selected *ngIf="formGroup.controls[masterForm.name] && isLabel(masterForm)">{{masterForm.display}}</mat-chip>
         <mat-divider *ngIf="formGroup.controls[masterForm.name] && isLabel(masterForm)"></mat-divider>
@@ -25,7 +24,7 @@
                         [placeholderLabel]="masterForm.filterPlaceholder"
                         [noEntriesFoundLabel]="masterForm.filterNoEntries"></ngx-mat-select-search>
                 </mat-option>
-                <mat-option *ngIf="!masterForm.required" value="null">Aucun</mat-option> <!-- todo: change condition & value-->
+                <mat-option *ngIf="!masterForm.nullable" [value]="masterForm.nullableValue">{{ !masterForm.default ? "None" : masterForm.default }}</mat-option>
                 <ng-container *ngFor="let value of getItemsList(masterForm)">
                     <mat-option *ngIf="!masterForm.customDataField" [value]="value">{{ value }}</mat-option>
                     <mat-option *ngIf="masterForm.customDataField" [value]="value[masterForm.customDataField.sourceField]">{{ value[masterForm.customDataField.sourceField] }}</mat-option>
@@ -37,7 +36,7 @@
             <mat-icon *ngIf="masterForm.hasIcon" matSuffix>{{masterForm.icon}}</mat-icon>
         </mat-form-field>
         <div *ngIf="formGroup.controls[masterForm.name] && isCheckbox(masterForm)" class="add-bottom-padding">
-            <mat-checkbox [formControlName]="masterForm.name" [required]=required>{{masterForm.display}}</mat-checkbox>
+            <mat-checkbox [formControlName]="masterForm.name" [required]="masterForm.required">{{masterForm.display}}</mat-checkbox>
             <mat-icon *ngIf="masterForm.hasIcon" matSuffix>{{masterForm.icon}}</mat-icon>
         </div>
         <mat-form-field *ngIf="formGroup.controls[masterForm.name] && isTextarea(masterForm)" appearance="fill"
@@ -50,5 +49,4 @@
             <mat-icon *ngIf="masterForm.hasIcon" matSuffix>{{masterForm.icon}}</mat-icon>
         </mat-form-field>
     </ng-template>
-    <!-- </div> -->
 </form>

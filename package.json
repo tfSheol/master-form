@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "publish-github-page": "ng build --base-href https://tfsheol.github.io/master-form/ --configuration production && npx angular-cli-ghpages --dir=dist/master-form"
+    "publish-github-page": "ng build --configuration production && npx angular-cli-ghpages --dir=dist/master-form"
   },
   "private": true,
   "dependencies": {
@@ -27,7 +27,7 @@
     "@angular/router": "~13.3.11",
     "@types/node": "^13.13.15",
     "material-design-icons-iconfont": "6.1.0",
-    "ngx-mat-select-search": "^3.1.2",
+    "ngx-mat-select-search": "^4.1.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.4.0",
     "zone.js": "~0.11.4"
